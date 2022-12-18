@@ -3,6 +3,7 @@ lazy val V = _root_.scalafix.sbt.BuildInfo
 lazy val rulesCrossVersions = Seq(V.scala213, V.scala212, V.scala211)
 lazy val scala3Version = "3.1.1"
 
+
 inThisBuild(
   List(
     organization := "io.github.schetvertkov",
@@ -11,7 +12,7 @@ inThisBuild(
     ),
     developers := List(
       Developer(
-        "stanislav-chetvertkov",
+        "stanislav-che8",
         "Stanislav Chetvertkov",
         "stanislav.chetvertkov@gmail.com",
         url("https://github.com/stanislav-chetvertkov")
@@ -20,22 +21,22 @@ inThisBuild(
     semanticdbEnabled := true,
     semanticdbIncludeInJar := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    sonatypeCredentialHost := "s01.oss.sonatype.org",
-    sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
-    sonatypeProfileName := "io.github.ghostbuster91",
-    scalacOptions ++= List("-Yrangepos"),
-    sonatypeSnapshotResolver := {
-      MavenRepository(
-        "s01-sonatype-snapshots",
-        s"https://${sonatypeCredentialHost.value}/content/repositories/snapshots"
-      )
-    },
-    sonatypeStagingResolver := {
-      MavenRepository(
-        "s01-sonatype-staging",
-        s"https://${sonatypeCredentialHost.value}/service/local/staging/deploy/maven2"
-      )
-    }
+//    sonatypeCredentialHost := "s01.oss.sonatype.org",
+//    sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
+//    sonatypeProfileName := "io.github.schetvertkov",
+//    scalacOptions ++= List("-Yrangepos"),
+//    sonatypeSnapshotResolver := {
+//      MavenRepository(
+//        "s01-sonatype-snapshots",
+//        s"https://${sonatypeCredentialHost.value}/content/repositories/snapshots"
+//      )
+//    },
+//    sonatypeStagingResolver := {
+//      MavenRepository(
+//        "s01-sonatype-staging",
+//        s"https://${sonatypeCredentialHost.value}/service/local/staging/deploy/maven2"
+//      )
+//    }
   )
 )
 
