@@ -1,0 +1,10 @@
+tests/target/**
+rules/target/**
+project/target/**
+project/project/**
+output/target
+input/target
+.idea
+.sbt
+.bsp
+target/**
