@@ -9,6 +9,11 @@ import scala.meta._
 class ToIO extends SemanticRule("ToIO") {
   override def fix(implicit doc: SemanticDocument): Patch = {
 
+    //doc.tree.collect {
+    //  case future @ Importee.Name(Name("Future")) =>
+    //    Patch.removeImportee(future)
+    //}.showDiff()
+
 //    val CompanianAliases = SymbolMatcher.exact("zio/IO.", "zio/UIO.", "zio/URIO.", "zio/Task.", "zio/RIO.")
 //
 //    val UIOAlias = SymbolMatcher.exact("zio/UIO.")
