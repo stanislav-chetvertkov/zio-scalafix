@@ -10,6 +10,18 @@ class OptionZio extends SemanticRule("OptionZio") {
     println("Tree.structure: " + doc.tree.structure)
     println("Tree.structureLabeled: " + doc.tree.structureLabeled)
     doc.tree.collect {
+//      case t@Term.Apply(fun, args) =>
+//        println(fun.symbol.info)
+//        fun.symbol.info match {
+//          case Some(x) =>
+//            println(x)
+//          case None =>
+//        }
+//
+//        println(fun)
+//        println(args)
+//        println(t)
+//        Patch.empty
       case t@q"ZIO.succeed(None)" => Patch.replaceTree(t, "ZIO.none")
       case t@q"ZIO.succeed(Some($x))" => Patch.replaceTree(t, q"ZIO.some($x)".toString())
     }.asPatch
