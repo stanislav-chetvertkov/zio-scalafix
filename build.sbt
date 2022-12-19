@@ -3,6 +3,17 @@ lazy val V = _root_.scalafix.sbt.BuildInfo
 lazy val rulesCrossVersions = Seq(V.scala213, V.scala212, V.scala211)
 lazy val scala3Version = "3.1.1"
 
+lazy val commonSettings = Seq(
+  addCompilerPlugin(scalafixSemanticdb),
+  addCompilerPlugin("org.scalameta" % "semanticdb-scalac" % "4.7.0" cross CrossVersion.full),
+  scalacOptions += "-Yrangepos",           // required by SemanticDB compiler plugin
+//  scalacOptions += "-Ywarn-unused-import", // required by SemanticDB compiler plugin
+)
+
+//ThisBuild / scalaVersion := V.scala212
+
+addCompilerPlugin("org.scalameta" % "semanticdb-scalac" % "4.7.0" cross CrossVersion.full)
+ThisBuild / scalacOptions += "-Yrangepos"
 
 inThisBuild(
   List(
@@ -55,7 +66,9 @@ lazy val rules = projectMatrix
   .settings(
     moduleName := "zio-scalafix-rules",
     libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % V.scalafixVersion,
-    libraryDependencies += "dev.zio" %% "zio" % "2.0.5"
+//    libraryDependencies += "org.scalameta" %% "semanticdb" % "4.7.0",
+    libraryDependencies += "dev.zio" %% "zio" % "2.0.5",
+    commonSettings
   )
   .defaultAxes(VirtualAxis.jvm)
   .jvmPlatform(rulesCrossVersions)
@@ -63,10 +76,11 @@ lazy val rules = projectMatrix
 lazy val input = projectMatrix
   .settings(
     publish / skip := true,
-    libraryDependencies += "dev.zio" %% "zio" % "2.0.5"
+    libraryDependencies += "dev.zio" %% "zio" % "2.0.5",
+    commonSettings
   )
   .defaultAxes(VirtualAxis.jvm)
-  .jvmPlatform(scalaVersions = rulesCrossVersions :+ scala3Version)
+  .jvmPlatform(scalaVersions = rulesCrossVersions)// :+ scala3Version)
 
 lazy val output = projectMatrix
   .settings(
@@ -74,17 +88,19 @@ lazy val output = projectMatrix
     libraryDependencies += "dev.zio" %% "zio" % "2.0.5"
   )
   .defaultAxes(VirtualAxis.jvm)
-  .jvmPlatform(scalaVersions = rulesCrossVersions :+ scala3Version)
+  .jvmPlatform(scalaVersions = rulesCrossVersions)// :+ scala3Version)
 
 lazy val testsAggregate = Project("tests", file("target/testsAggregate"))
   .aggregate(tests.projectRefs: _*)
   .settings(
-    publish / skip := true
+    publish / skip := true,
+    commonSettings
   )
 
 lazy val tests = projectMatrix
   .settings(
     libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % V.scalafixVersion % Test cross CrossVersion.full,
+    commonSettings,
     publish / skip := true,
     scalafixTestkitOutputSourceDirectories := TargetAxis.resolve(output, Compile / unmanagedSourceDirectories).value,
     scalafixTestkitInputSourceDirectories := TargetAxis.resolve(input, Compile / unmanagedSourceDirectories).value,
@@ -95,11 +111,11 @@ lazy val tests = projectMatrix
   .defaultAxes(
     rulesCrossVersions.map(VirtualAxis.scalaABIVersion) :+ VirtualAxis.jvm: _*
   )
-  .jvmPlatform(
-    scalaVersions = Seq(V.scala212),
-    axisValues = Seq(TargetAxis(scala3Version)),
-    settings = Seq()
-  )
+//  .jvmPlatform(
+//    scalaVersions = Seq(V.scala212),
+//    axisValues = Seq(TargetAxis(scala3Version)),
+//    settings = Seq()
+//  )
   .jvmPlatform(
     scalaVersions = Seq(V.scala213),
     axisValues = Seq(TargetAxis(V.scala213)),
@@ -110,10 +126,10 @@ lazy val tests = projectMatrix
     axisValues = Seq(TargetAxis(V.scala212)),
     settings = Seq()
   )
-  .jvmPlatform(
-    scalaVersions = Seq(V.scala211),
-    axisValues = Seq(TargetAxis(V.scala211)),
-    settings = Seq()
-  )
+//  .jvmPlatform(
+//    scalaVersions = Seq(V.scala211),
+//    axisValues = Seq(TargetAxis(V.scala211)),
+//    settings = Seq()
+//  )
   .dependsOn(rules)
   .enablePlugins(ScalafixTestkitPlugin)
