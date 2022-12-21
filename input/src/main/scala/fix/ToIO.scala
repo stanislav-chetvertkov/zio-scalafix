@@ -15,4 +15,6 @@ object ToIO {
   val taskLayer: ZLayer[Any, Throwable, Unit] = ZLayer.succeed(())
   val ulayer: ZLayer[Any, Nothing, Unit] = ZLayer.succeed(())
   val rlayer: ZLayer[String, Throwable, Unit] = ZLayer.succeed(())
+  // & replacement
+  val withTest: ZIO[String with Int with Boolean, Nothing, Unit] = ZIO.unit
 }
