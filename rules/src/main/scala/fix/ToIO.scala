@@ -4,8 +4,6 @@ import scalafix.v1._
 import scala.meta._
 
 //fixme: rename to AliasTypesForZIO
-//todo: create a new rule for 'AliasTypesForZLayers'
-
 class ToIO extends SemanticRule("ToIO") {
   override def fix(implicit doc: SemanticDocument): Patch = {
 
@@ -27,11 +25,20 @@ class ToIO extends SemanticRule("ToIO") {
         Patch.addLeft(t, "import zio.IO\n")
     }
 
+    def replaceAmp(in: Type): Type = {
+      in match {
+        case t"$r1 with $r2" =>
+          t"${replaceAmp(r1)} & $r2"
+        case _ =>
+          in
+      }
+    }
+
     val patchZIO: PartialFunction[Tree, Patch] = {
       case t@Type.Apply(Type.Name("ZIO"), List(Type.Name("Any"), Type.Name("Nothing"), b)) =>
         Patch.replaceTree(t, Type.Apply(Type.Name("UIO"), List(b)).toString())
       case t@Type.Apply(Type.Name("ZIO"), List(r, Type.Name("Nothing"), b)) =>
-        Patch.replaceTree(t, Type.Apply(Type.Name("URIO"), List(r, b)).toString())
+        Patch.replaceTree(t, Type.Apply(Type.Name("URIO"), List(replaceAmp(r), b)).toString())
       case t@Type.Apply(Type.Name("ZIO"), List(Type.Name("Any"), Type.Name("Throwable"), b)) =>
         Patch.replaceTree(t, Type.Apply(Type.Name("Task"), List(b)).toString())
       case t@Type.Apply(Type.Name("ZIO"), List(r, Type.Name("Throwable"), b)) =>
