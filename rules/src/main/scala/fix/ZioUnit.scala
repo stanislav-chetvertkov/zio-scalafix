@@ -21,9 +21,21 @@ class ZioUnit extends SemanticRule("ZioUnit") {
     // ),
 
     val ZioMatcher = SymbolMatcher.exact("zio/ZIO#")
+    val ZioMapMatcher = SymbolMatcher.exact("zio/ZIO#map().")
     val AliasForApply = SymbolMatcher.exact("zio/ZIO#`*>`().")
 
     doc.tree.collect {
+      case t@Term.Apply(fun, args) =>
+        if (ZioMapMatcher.matches(fun.symbol)) {
+          t match {
+            case q"$c.map(_ => ())" =>
+              Patch.replaceTree(t, q"$c.unit".toString())
+            case _ =>
+              Patch.empty
+          }
+        } else {
+          Patch.empty
+        }
       case t@ Term.ApplyInfix(app, applyOp, _, List(Term.Select(Term.Name("ZIO"), Term.Name("unit")))) =>
         app.symbol.info.map(_.signature) match {
           case Some(MethodSignature(_, _, c)) =>

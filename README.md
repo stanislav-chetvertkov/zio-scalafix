@@ -48,6 +48,13 @@ The following expressions can be simplified to .unit:
 
 ```scala
 x *> ZIO.unit  -> x.unit
-x.as(())       -> x.unit
 x.map(_ => ()) -> x.unit
+```
+
+#### ZioIgnore
+
+```scala
+x.catchAll(_ => ZIO.unit)                  -> x.ignore
+x.foldCause(_ => (), _ => ())              -> x.ignore
+x.foldCauseM(_ => ZIO.unit, _ => ZIO.unit) -> x.ignore
 ```

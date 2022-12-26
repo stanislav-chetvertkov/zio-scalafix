@@ -2,3 +2,4 @@ fix.ToIO
 fix.OptionZio
 fix.MapAnyError
 fix.ZioUnit
+fix.ZioIgnore
