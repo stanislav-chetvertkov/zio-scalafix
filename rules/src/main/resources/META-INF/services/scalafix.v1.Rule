@@ -3,3 +3,4 @@ fix.OptionZio
 fix.MapAnyError
 fix.ZioUnit
 fix.ZioIgnore
+fix.ZioWhen
