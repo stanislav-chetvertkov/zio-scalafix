@@ -1,4 +1,4 @@
-fix.ZioRewrite
 fix.ToIO
 fix.OptionZio
 fix.MapAnyError
+fix.ZioUnit

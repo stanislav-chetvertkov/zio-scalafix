@@ -42,7 +42,7 @@ class ToIO extends SemanticRule("ToIO") {
       case t@Type.Apply(Type.Name("ZIO"), List(Type.Name("Any"), Type.Name("Throwable"), b)) =>
         Patch.replaceTree(t, Type.Apply(Type.Name("Task"), List(b)).toString())
       case t@Type.Apply(Type.Name("ZIO"), List(r, Type.Name("Throwable"), b)) =>
-        Patch.replaceTree(t, Type.Apply(Type.Name("RIO"), List(r, b)).toString())
+        Patch.replaceTree(t, Type.Apply(Type.Name("RIO"), List(replaceAmp(r), b)).toString())
       case t@Type.Apply(Type.Name("ZIO"), List(Type.Name("Any"), e, b)) =>
         Patch.replaceTree(t, Type.Apply(Type.Name("IO"), List(e, b)).toString())
     }
@@ -51,11 +51,11 @@ class ToIO extends SemanticRule("ToIO") {
       case t@Type.Apply(Type.Name("ZLayer"), List(Type.Name("Any"), Type.Name("Nothing"), b)) =>
         Patch.replaceTree(t, Type.Apply(Type.Name("ULayer"), List(b)).toString())
       case t@Type.Apply(Type.Name("ZLayer"), List(r, Type.Name("Nothing"), b)) =>
-        Patch.replaceTree(t, Type.Apply(Type.Name("URLayer"), List(r, b)).toString())
+        Patch.replaceTree(t, Type.Apply(Type.Name("URLayer"), List(replaceAmp(r), b)).toString())
       case t@Type.Apply(Type.Name("ZLayer"), List(Type.Name("Any"), Type.Name("Throwable"), b)) =>
         Patch.replaceTree(t, Type.Apply(Type.Name("TaskLayer"), List(b)).toString())
       case t@Type.Apply(Type.Name("ZLayer"), List(r, Type.Name("Throwable"), b)) =>
-        Patch.replaceTree(t, Type.Apply(Type.Name("RLayer"), List(r, b)).toString())
+        Patch.replaceTree(t, Type.Apply(Type.Name("RLayer"), List(replaceAmp(r), b)).toString())
       case t@Type.Apply(Type.Name("ZLayer"), List(Type.Name("Any"), e, b)) =>
         Patch.replaceTree(t, Type.Apply(Type.Name("Layer"), List(e, b)).toString())
     }
