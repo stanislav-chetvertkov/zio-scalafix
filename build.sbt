@@ -11,6 +11,7 @@ lazy val commonSettings = Seq(
 )
 
 //ThisBuild / scalaVersion := V.scala212
+ThisBuild / version := "0.1.1"
 
 addCompilerPlugin("org.scalameta" % "semanticdb-scalac" % "4.7.0" cross CrossVersion.full)
 ThisBuild / scalacOptions += "-Yrangepos"
